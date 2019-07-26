@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const WebSocket = require('ws');
 const zKillAddress = 'wss://zkillboard.com:2096';
 var http = require('axios');
+var HTMLParser = require('node-html-parser');
 var ws;
 
 
@@ -25,24 +26,41 @@ connectToZkillWebSocket = ()=>
       ws.on('message', function incoming(message) {
 
         let kill = JSON.parse(message);
-        console.log(kill);
-
-        //if no alliance this will error create array 
-        http.all([
+        console.log('km');
+        if(kill.victim)
+        {
+        let requestArray = [
             http.get('https://esi.evetech.net/latest/characters/'+kill.victim.character_id+'/?datasource=tranquility'),
             http.get('https://esi.evetech.net/latest/corporations/'+kill.victim.corporation_id+'/?datasource=tranquility'),
-            http.get('https://esi.evetech.net/latest/alliances/'+kill.victim.alliance_id+'/?datasource=tranquility'),
-        ]).then(http.spread((character, corp, alliance) => {
+       //     http.get('https://zkillboard.com/ship/'+kill.victim.ship_type_id),
+        ];
+
+        //if alliance, add it to the query 
+        if(kill.victim.alliance_id){ 
+            requestArray.push(http.get('https://esi.evetech.net/latest/alliances/'+kill.victim.alliance_id+'/?datasource=tranquility'));
+        }
+
+        http.all(requestArray).then(http.spread((character, corp, zkillShip, alliance) => {
+
+           console.log(corp.data, character.data);
+            
             /* console.log('character',character.data);
             console.log('corp',corp.data);
             console.log('alliance',alliance.data);  */
 
             //  sendEmbeddedKillMessage(kill, character.data,corp.data,alliance.data);
 
+           // let parse = HTMLParser.parse(zkillShip.data);
+           // console.log(parse);
+         // level1 = parse.text;
+           // console.log(level1);
+
           })).catch(error => {
-            //console.log('Error occured', error);
+            console.log('Error occured', error);
           });
-                      
+
+        }  
+
       });
 
    
