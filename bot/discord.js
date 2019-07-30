@@ -54,6 +54,10 @@ client.on('ready', () => {
   
   
   client.on('message', msg => {
+
+
+        /// search for command string here, then send to a command. 
+
     if (msg.content === 'ping') {
       msg.reply('Pong!');
     }
