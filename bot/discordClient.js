@@ -1,10 +1,41 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
+console.log('loaded');
+
 module.exports = {
 
-    sendEmbeddedKillMessage: (kill, corp, character, alliance)  => {
-        //  console.log(character);
+
+    connectToDiscord: ()=>{
+
+        client.on('ready', () => {
+            console.log(`Logged in as ${client.user.tag}!`);
+        });
+              
+          
+          client.on('message', msg => {
+
+            //
+            if (msg.content === 'ping') {
+              msg.reply('Pong!');
+            }
+          });
+        
+        //client.login('mfa.LKSGUeNOxFVIGL9d0je3v64RwCXc4TR2TZSBDK0QiJKAoPHV1a38mCiWjNRqrx0yfIR-gb2nYVTcCqarmHoc');
+        client.login('MTQyNDM1MTk1NzkzMDQ3NTUy.XTomNg.ChfEPledz8uKVPwsgV-kFx598NA');
+        
+
+      },
+
+        sendEmbeddedKillMessage: (kill, corp, character, alliance)  => {
+          console.log(kill, corp,character);
+
+
+       /*  sde.fetchItemInfo(23057).then((r)=>{
+
+            console.log(r[0].typeID);
+        }); */
+
           client.channels.get('604049077864366108').send({embed: {
               color: 3447003,
           /*   author: {
@@ -41,33 +72,14 @@ module.exports = {
           }
           });
       
+      },
+
+      test: ()=>{
+
+        console.log('test');
       }
+
+      
 };
 
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-
-//    test.test();
-      connectToZkillWebSocket();
-});
-      
-  
-  
-  client.on('message', msg => {
-
-
-        /// search for command string here, then send to a command. 
-
-    if (msg.content === 'ping') {
-      msg.reply('Pong!');
-    }
-  
-  
-    ///604049077864366108
-  });
-
-
-
-//client.login('mfa.LKSGUeNOxFVIGL9d0je3v64RwCXc4TR2TZSBDK0QiJKAoPHV1a38mCiWjNRqrx0yfIR-gb2nYVTcCqarmHoc');
-client.login('MTQyNDM1MTk1NzkzMDQ3NTUy.XTomNg.ChfEPledz8uKVPwsgV-kFx598NA');
 
